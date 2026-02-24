@@ -1,0 +1,427 @@
+﻿<UserControl x:Class="CimaCheck.PagePrincipal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:CimaCheck"
+             mc:Ignorable="d"
+             d:DesignHeight="900" d:DesignWidth="1200">
+
+    <UserControl.Resources>
+        <!-- Colores UABC -->
+        <SolidColorBrush x:Key="UABCGreen" Color="#00594D"/>
+        <SolidColorBrush x:Key="UABCGold" Color="#D7A22A"/>
+        <SolidColorBrush x:Key="PrimaryGreen" Color="#4C9C16"/>
+        <SolidColorBrush x:Key="BackgroundLight" Color="#F7F8F6"/>
+        <SolidColorBrush x:Key="NeutralBeige" Color="#F5F5DC"/>
+        <SolidColorBrush x:Key="TextDark" Color="#182111"/>
+
+        <!-- Estilo para botones del header -->
+        <Style x:Key="HeaderButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource PrimaryGreen}"/>
+            <Setter Property="Foreground" Value="{StaticResource BackgroundLight}"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="20,8"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="20"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="0.9"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="HeaderButtonSecondaryStyle" TargetType="Button" BasedOn="{StaticResource HeaderButtonStyle}">
+            <Setter Property="Background" Value="#334C9C16"/>
+            <Setter Property="Foreground" Value="{StaticResource PrimaryGreen}"/>
+        </Style>
+
+        <!-- Estilo para enlaces del header -->
+        <Style x:Key="HeaderLinkStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Foreground" Value="{StaticResource TextDark}"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="15,0"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="TextDecorations" Value="Underline"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Estilo para las tarjetas de registro -->
+        <Style x:Key="RegistrationCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="#4DF5F5DC"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="40"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect ShadowDepth="0" BlurRadius="0" Opacity="0"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderBrush" Value="{StaticResource UABCGold}"/>
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect ShadowDepth="5" BlurRadius="15" Opacity="0.2" Color="#D7A22A"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Geometrías para iconos -->
+        <PathGeometry x:Key="GroupIcon" Figures="M16,13C15.71,13 15.38,13 15.03,13.05C16.19,13.89 17,15 17,16.5V19H23V16.5C23,14.17 18.33,13 16,13M8,13C5.67,13 1,14.17 1,16.5V19H15V16.5C15,14.17 10.33,13 8,13M8,11A3,3 0 0,0 11,8A3,3 0 0,0 8,5A3,3 0 0,0 5,8A3,3 0 0,0 8,11M16,11A3,3 0 0,0 19,8A3,3 0 0,0 16,5A3,3 0 0,0 13,8A3,3 0 0,0 16,11Z"/>
+        <PathGeometry x:Key="PersonIcon" Figures="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"/>
+        <PathGeometry x:Key="MenuIcon" Figures="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Padding="40,15,40,15" BorderBrush="#334C9C16" BorderThickness="0,0,0,1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Logo y título -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <Viewbox Width="24" Height="24" Margin="0,0,15,0">
+                        <Canvas Width="48" Height="48">
+                            <Path Fill="{StaticResource UABCGreen}" Data="M44,4 L30.6666,4 L30.6666,17.3334 L17.3334,17.3334 L17.3334,30.6666 L4,30.6666 L4,44 L44,44 Z"/>
+                        </Canvas>
+                    </Viewbox>
+                    <TextBlock Text="UABC Event Registration" 
+                               FontSize="18" 
+                               FontWeight="Bold" 
+                               Foreground="{StaticResource UABCGreen}"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- Navegación -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+
+                    <Image x:Name="CheckImageOk"
+                           Height="20"
+                           Width="20"
+                           Margin="0,0,0,0"
+                           Source="/Resources/Icons/ok_icon.png"
+                           Visibility="Hidden"/>
+                    <Image x:Name="CheckImageError"
+                           Height="20"
+                           Width="20"
+                           Margin="0,0,0,0"
+                           Source="/Resources/Icons/error_icon.png"
+                           Visibility="Hidden"/>
+
+                    <Button x:Name="btnSoporte" 
+                            Content="Soporte"
+                            Margin="0, 0, 0, 0"
+                            Style="{StaticResource HeaderButtonSecondaryStyle}" Click="btnSoporte_Click"
+                            />
+
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Contenido Principal -->
+        <Grid Grid.Row="1">
+            <StackPanel HorizontalAlignment="Center" 
+                        VerticalAlignment="Center"
+                        Width="900" 
+                        
+                        Margin="0,0,0,0">
+                <!-- Título principal -->
+                <TextBlock Text="Elige un tipo de registro" 
+                           FontSize="56" 
+                           FontWeight="Black" 
+                           Foreground="{StaticResource UABCGreen}"
+                           TextAlignment="Center"
+                           Margin="0,0,0,60"/>
+
+                <!-- Botones de selección -->
+                <Grid Height="200">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="25"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Botón: Como grupo -->
+                    <Button x:Name="GroupRegistrationButton" 
+                            Grid.Column="0" 
+                            Background="Transparent" 
+                            BorderThickness="0"
+                            Padding="0"
+                            RenderTransformOrigin="0.5,0.5">
+                        <Button.RenderTransform>
+                            <RotateTransform Angle="-3"/>
+                        </Button.RenderTransform>
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="CardBorder" 
+                                        Style="{StaticResource RegistrationCardStyle}"
+                                        RenderTransformOrigin="0.5,0.5">
+                                    <Border.RenderTransform>
+                                        <ScaleTransform ScaleX="1" ScaleY="1"/>
+                                    </Border.RenderTransform>
+                                    <StackPanel HorizontalAlignment="Center">
+                                        <Viewbox Width="60" Height="60" Margin="0,0,0,20">
+                                            <Canvas Width="24" Height="24">
+                                                <Path Fill="{StaticResource UABCGold}" Data="{StaticResource GroupIcon}"/>
+                                            </Canvas>
+                                        </Viewbox>
+                                        <TextBlock Text="Como grupo" 
+                                                   FontSize="28" 
+                                                   FontWeight="Bold" 
+                                                   Foreground="{StaticResource UABCGreen}"
+                                                   TextAlignment="Center"
+                                                   Margin="0,0,0,15"/>
+                                        <TextBlock Text="Registra a varios asistentes a la vez y gestiona tu equipo fácilmente." 
+                                                   FontSize="14" 
+                                                   Foreground="#FF555555"
+                                                   TextWrapping="Wrap"
+                                                   TextAlignment="Center"
+                                                   MaxWidth="280"/>
+                                    </StackPanel>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Trigger.EnterActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetName="CardBorder"
+                                                                   Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
+                                                                   To="1.05" Duration="0:0:0.3">
+                                                        <DoubleAnimation.EasingFunction>
+                                                            <CubicEase EasingMode="EaseOut"/>
+                                                        </DoubleAnimation.EasingFunction>
+                                                    </DoubleAnimation>
+                                                    <DoubleAnimation Storyboard.TargetName="CardBorder"
+                                                                   Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+                                                                   To="1.05" Duration="0:0:0.3">
+                                                        <DoubleAnimation.EasingFunction>
+                                                            <CubicEase EasingMode="EaseOut"/>
+                                                        </DoubleAnimation.EasingFunction>
+                                                    </DoubleAnimation>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </Trigger.EnterActions>
+                                        <Trigger.ExitActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetName="CardBorder"
+                                                                   Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
+                                                                   To="1.0" Duration="0:0:0.3"/>
+                                                    <DoubleAnimation Storyboard.TargetName="CardBorder"
+                                                                   Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+                                                                   To="1.0" Duration="0:0:0.3"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </Trigger.ExitActions>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+
+                    <!-- Botón: Individual -->
+                    <Button x:Name="IndividualRegistrationButton" 
+                            Grid.Column="2" 
+                            Background="Transparent" 
+                            BorderThickness="0"
+                            Padding="0"
+                            RenderTransformOrigin="0.5,0.5">
+                        <Button.RenderTransform>
+                            <RotateTransform Angle="3"/>
+                        </Button.RenderTransform>
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="CardBorder" 
+                                        Style="{StaticResource RegistrationCardStyle}"
+                                        RenderTransformOrigin="0.5,0.5">
+                                    <Border.RenderTransform>
+                                        <ScaleTransform ScaleX="1" ScaleY="1"/>
+                                    </Border.RenderTransform>
+                                    <StackPanel HorizontalAlignment="Center">
+                                        <Viewbox Width="60" Height="60" Margin="0,0,0,20">
+                                            <Canvas Width="24" Height="24">
+                                                <Path Fill="{StaticResource UABCGold}" Data="{StaticResource PersonIcon}"/>
+                                            </Canvas>
+                                        </Viewbox>
+                                        <TextBlock Text="Individual" 
+                                                   FontSize="28" 
+                                                   FontWeight="Bold" 
+                                                   Foreground="{StaticResource UABCGreen}"
+                                                   TextAlignment="Center"
+                                                   Margin="0,0,0,15"/>
+                                        <TextBlock Text="¿Vienes solo? Regístrate de forma rápida y sencilla para asegurar tu lugar." 
+                                                   FontSize="14" 
+                                                   Foreground="#FF555555"
+                                                   TextWrapping="Wrap"
+                                                   TextAlignment="Center"
+                                                   MaxWidth="280"/>
+                                    </StackPanel>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Trigger.EnterActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetName="CardBorder"
+                                                                   Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
+                                                                   To="1.05" Duration="0:0:0.3">
+                                                        <DoubleAnimation.EasingFunction>
+                                                            <CubicEase EasingMode="EaseOut"/>
+                                                        </DoubleAnimation.EasingFunction>
+                                                    </DoubleAnimation>
+                                                    <DoubleAnimation Storyboard.TargetName="CardBorder"
+                                                                   Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+                                                                   To="1.05" Duration="0:0:0.3">
+                                                        <DoubleAnimation.EasingFunction>
+                                                            <CubicEase EasingMode="EaseOut"/>
+                                                        </DoubleAnimation.EasingFunction>
+                                                    </DoubleAnimation>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </Trigger.EnterActions>
+                                        <Trigger.ExitActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetName="CardBorder"
+                                                                   Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
+                                                                   To="1.0" Duration="0:0:0.3"/>
+                                                    <DoubleAnimation Storyboard.TargetName="CardBorder"
+                                                                   Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+                                                                   To="1.0" Duration="0:0:0.3"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </Trigger.ExitActions>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </Grid>
+
+                <Button x:Name="CimaRegistrationButton" 
+                            Grid.Column="0" 
+                            Background="Transparent" 
+                            BorderThickness="0"
+                            Padding="0"
+                            RenderTransformOrigin="0.5,0.5"
+                            Margin="0,15,0,00">
+                    <Button.RenderTransform>
+                        <RotateTransform Angle="0"/>
+                    </Button.RenderTransform>
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="CardBorder" 
+                                        Style="{StaticResource RegistrationCardStyle}"
+                                        RenderTransformOrigin="0.5,0.5">
+                                <Border.RenderTransform>
+                                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                                </Border.RenderTransform>
+                                <StackPanel HorizontalAlignment="Center">
+                                    <Viewbox Width="60" Height="60" Margin="0,0,0,20">
+                                        <Canvas Width="24" Height="24">
+                                            <Path Fill="{StaticResource UABCGold}" Data="{StaticResource GroupIcon}"/>
+                                        </Canvas>
+                                    </Viewbox>
+                                    <TextBlock Text="Como Cimarrón" 
+                                                   FontSize="28" 
+                                                   FontWeight="Bold" 
+                                                   Foreground="{StaticResource UABCGreen}"
+                                                   TextAlignment="Center"
+                                                   Margin="0,0,0,15"/>
+                                    <TextBlock Text="Registrate como un cimarrón con valores" 
+                                                   FontSize="14" 
+                                                   Foreground="#FF555555"
+                                                   TextWrapping="Wrap"
+                                                   TextAlignment="Center"
+                                                   MaxWidth="280"/>
+                                </StackPanel>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetName="CardBorder"
+                                                                   Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
+                                                                   To="1.05" Duration="0:0:0.3">
+                                                    <DoubleAnimation.EasingFunction>
+                                                        <CubicEase EasingMode="EaseOut"/>
+                                                    </DoubleAnimation.EasingFunction>
+                                                </DoubleAnimation>
+                                                <DoubleAnimation Storyboard.TargetName="CardBorder"
+                                                                   Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+                                                                   To="1.05" Duration="0:0:0.3">
+                                                    <DoubleAnimation.EasingFunction>
+                                                        <CubicEase EasingMode="EaseOut"/>
+                                                    </DoubleAnimation.EasingFunction>
+                                                </DoubleAnimation>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.EnterActions>
+                                    <Trigger.ExitActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetName="CardBorder"
+                                                                   Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
+                                                                   To="1.0" Duration="0:0:0.3"/>
+                                                <DoubleAnimation Storyboard.TargetName="CardBorder"
+                                                                   Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+                                                                   To="1.0" Duration="0:0:0.3"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.ExitActions>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <!-- Footer -->
+        <Border Grid.Row="2" 
+                Padding="40,30" 
+                BorderBrush="#334C9C16" 
+                BorderThickness="0,0,0,0">
+            <Grid Margin="0,0,0,0">
+                <TextBlock Text="© 2025 UABC. Todos los derechos reservados." 
+                               FontSize="13" 
+                               Foreground="#FF888888"
+                               HorizontalAlignment="Center"/>
+                <!-- Estos son para colocar las imagenes para saber si la conexion funciono -->
+                
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
