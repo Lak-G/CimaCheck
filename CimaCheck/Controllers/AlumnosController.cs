@@ -8,6 +8,8 @@ using Supabase.Postgrest.Models;
 
 namespace CimaCheck.Controllers
 {
+
+    //Metodo a profundizar
     public static class AlumnosController
     {
         public static async Task<bool> ActualizarAsistencia(Supabase.Client supabase, int alumnoId, bool asistencia)
