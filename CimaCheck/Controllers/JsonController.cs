@@ -1,4 +1,4 @@
-﻿using CimaCheck.Models;
+using CimaCheck.Models;
 using CimaCheck.Services;
 using System;
 using System.Collections.Generic;
@@ -171,17 +171,35 @@ namespace CimaCheck.Controllers
 
         public static async Task<List<T>> JsonDeserializer<T>(string fileName)
         {
-            string jsonString = File.ReadAllText(fileName);
-            using FileStream openStream = File.OpenRead(fileName);
-
-            List<T>? lista = await JsonSerializer.DeserializeAsync<List<T>>(openStream);
-
-            if (lista == null)
+            try
             {
-                MessageBox.Show("No se pudieron cargar los datos del json");
+                if (!File.Exists(fileName))
+                {
+                    MessageBox.Show($"No existe el archivo: {fileName}");
+                    return new List<T>();
+                }
+
+                string jsonString = await File.ReadAllTextAsync(fileName);
+
+                if (string.IsNullOrWhiteSpace(jsonString))
+                {
+                    return new List<T>();
+                }
+
+                List<T>? lista = JsonSerializer.Deserialize<List<T>>(jsonString);
+
+                if (lista == null)
+                {
+                    MessageBox.Show("No se pudieron cargar los datos del json");
+                    return new List<T>();
+                }
+                return lista;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar {fileName}: {ex.Message}");
                 return new List<T>();
             }
-            return lista;
         }
     }
 }

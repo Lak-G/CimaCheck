@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection.Metadata;
 using System.Text;
@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using CimaCheck.Controllers;
 using CimaCheck.Models;
+using CimaCheck.Services;
 
 namespace CimaCheck.Pages
 {
@@ -30,22 +31,38 @@ namespace CimaCheck.Pages
         public GroupRegistration()
         {
             InitializeComponent();
-
+            Loaded += async (s, e) =>
+            {
+                await CargarListasAsync();
+                await CargarListaAlumnosAsync();
+            };
         }
 
-
-        private async void CargarListas()
+        private async Task CargarListasAsync()
         {
             lsEscuelas = await JsonController.JsonDeserializer<Escuela>("Escuelas.json");
         }
 
+        private async Task CargarListaAlumnosAsync()
+        {
+            lsAlumnos = await JsonController.JsonDeserializer<Alumno>("Alumnos.json");
+        }
+
+
+        /// <summary>
+        /// Handles the SelectionChanged event for the educational level ComboBox, updating the list of available
+        /// schools based on the selected educational level.
+        /// </summary>
+        /// <remarks>If the selected educational level is not valid or not specified, the list of schools
+        /// is not updated. Any errors encountered during the update process are displayed to the user in a message
+        /// box.</remarks>
+        /// <param name="sender">The source of the event, typically the educational level ComboBox.</param>
+        /// <param name="e">The event data that contains information about the selection change.</param>
         private void NivelEducativoComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
-            MessageBox.Show("Evento3");
             if (NivelEducativoComboBox.SelectedItem is ComboBoxItem cbi)
             {
-                MessageBox.Show("Entroa4");
 
                 var contenido = cbi.Content?.ToString() ?? string.Empty;
                 if (string.IsNullOrWhiteSpace(contenido) || contenido == "Selecciona una escuela")
@@ -53,18 +70,13 @@ namespace CimaCheck.Pages
 
                 try
                 {
-                    MessageBox.Show("entra2");
-
-                    //aqui continua la logica de cargar escuelas 
-                    CargarListas();
-
                     SchoolNameComboBox.Items.Clear();
 
                     foreach (var escuela in lsEscuelas)
                     {
                         if (escuela.NivelEducativo.Equals(contenido))
                         {
-                            SchoolNameComboBox.Items.Add(escuela.NombreEscuela);
+                            SchoolNameComboBox.Items.Add(new ComboBoxItem { Content = escuela.NombreEscuela });
                         }
                     }
                 }
@@ -77,67 +89,58 @@ namespace CimaCheck.Pages
             }
         }
 
-        private async void CargarListaAlumnos()
-        {
-            lsAlumnos = await JsonController.JsonDeserializer<Alumno>("Alumnos.json");
-        }
-
+        /// <summary>
+        /// Handles the SelectionChanged event for the school name ComboBox, updating the displayed list of students
+        /// based on the selected school.
+        /// </summary>
+        /// <remarks>If the selected item is not a valid school, the method exits without updating the
+        /// student list. If an error occurs while loading or displaying students, an error message is shown and the
+        /// exception is rethrown.</remarks>
+        /// <param name="sender">The source of the event, typically the ComboBox whose selection has changed.</param>
+        /// <param name="e">The event data that contains information about the selection change.</param>
         private void SchoolNameComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
-            MessageBox.Show("Evento");
             if (SchoolNameComboBox.SelectedItem is ComboBoxItem cbi)
             {
-                MessageBox.Show("entra1");
-                //var contenido = cbi.Content.ToString() ?? string.Empty;
+                var contenido = cbi.Content.ToString() ?? string.Empty;
 
-                //if (string.IsNullOrWhiteSpace(contenido) || contenido == "Selecciona una escuela")
-                //    return;
-
-                //try
-                //{
-                //    CargarListaAlumnos();
-
-                //    SchoolNameComboBox.Items.Clear();
-
-                //    foreach (var escuela in lsEscuelas)
-                //    {
-                //        if (escuela.NombreEscuela.Equals(contenido))
-                //        {
-                //            escuelaActual = escuela;
-                //        }
-                //    }
-
-                //    ContenedorTarjetas.Children.Clear();
-
-                //    foreach (var alumno in lsAlumnos)
-                //    {
-                //        if (alumno.IdEscuela == escuelaActual.Id)
-                //        {
-                //            AddCard(alumno);
-                //        }
-                //    }
-                //}
-                //catch (Exception ex)
-                //{
-                //    MessageBox.Show($"Error en la carga de la lista: {ex.Message}");
-                //    throw;
-                //}
-            }
-        }
-
-        private void temp()
-        {
-            if (NivelEducativoComboBox.SelectedItem is ComboBoxItem cbi)
-            {
-                var contenido = cbi.Content?.ToString() ?? string.Empty;
                 if (string.IsNullOrWhiteSpace(contenido) || contenido == "Selecciona una escuela")
                     return;
+
+                try
+                {
+                    foreach (var escuela in lsEscuelas)
+                    {
+                        if (escuela.NombreEscuela.Equals(contenido))
+                        {
+                            escuelaActual = escuela;
+                        }
+                    }
+
+                    ContenedorTarjetas.Children.Clear();
+
+                    var alumnosDeEscuela = lsAlumnos.Where(a => a.IdEscuela == escuelaActual.Id).ToList();
+                    
+                    foreach (var alumno in alumnosDeEscuela)
+                    {
+                        AddCard(alumno);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error en la carga de la lista: {ex.Message}");
+                    throw;
+                }
             }
         }
 
-
-
+        /// <summary>
+        /// Adds a visual card representing the specified student to the card container.
+        /// </summary>
+        /// <remarks>The card displays the student's name, associated school, and attendance status.
+        /// Changes to the attendance checkbox are reflected in the student's attendance property.</remarks>
+        /// <param name="alumno">The student whose information will be displayed on the card. Cannot be null.</param>
         private void AddCard(Alumno alumno)
         {
             Border Tarjeta = new Border()
@@ -170,7 +173,7 @@ namespace CimaCheck.Pages
 
             string escuela = "No tiene escuela xd";
             foreach (var scuela in lsEscuelas)
-            {
+            { 
                 if(scuela.Id == alumno.IdEscuela)
                 {   
                     escuela = scuela.NombreEscuela;
@@ -207,6 +210,62 @@ namespace CimaCheck.Pages
             Tarjeta.Child = gridInterno;
 
             ContenedorTarjetas.Children.Add(Tarjeta);
+        }
+         
+
+        //private void ObtenerListaChecados()
+        //{
+        //    foreach (var Tarjeta in ContenedorTarjetas.Children)
+        //    { 
+        //        if (Tarjeta.Get)
+        //    }
+        //}
+
+        /// <summary>
+        /// Handles the Click event of the Submit button to register attendance for all students in the current list.
+        /// </summary>
+        /// <remarks>Displays a message to the user indicating the result of the attendance registration.
+        /// If there are no students to register, a warning message is shown. Any errors encountered during the process
+        ///  are reported to the user via a message box.</remarks>
+        /// <param name="sender">The source of the event, typically the Submit button.</param>
+        /// <param name="e">The event data associated with the Click event.</param>
+        private async void SubmitButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (lsAlumnos == null || lsAlumnos.Count == 0)
+            {
+                MessageBox.Show("No hay alumnos para registrar.");
+                return;
+            }
+
+            try
+            {
+                int exitosos = 0;
+                int fallos = 0;
+
+                foreach (var alumno in lsAlumnos)
+                {
+                    if (alumno.IdEscuela == escuelaActual.Id)
+                    {
+                        bool resultado = await DataManager.ActualizarAsistenciaAlumno(alumno.Id, alumno.Asistencia);
+                        if (resultado)
+                            exitosos++;
+                        else
+                            fallos++;
+
+                        if(alumno.Asistencia)
+                            MessageBox.Show($"Asistencia registrada para {alumno.NombreAlumno}.");
+                    }
+                }
+
+                if (fallos == 0)
+                    MessageBox.Show($"Asistencia registrada exitosamente para {exitosos} alumno(s).");
+                else
+                    MessageBox.Show($"Se registró la asistencia de {exitosos} alumno(s). {fallos} fallos.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al registrar asistencia: {ex.Message}");
+            }
         }
     }
 }

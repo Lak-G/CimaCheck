@@ -9,10 +9,8 @@ namespace CimaCheck.Models
         public int Id { get; set; }
         public int IdEscuela { get; set; }
         public int VisistanteId { get; set; }
-
         public bool Asistencia { get; set; }
         public string NombreAlumno { get; set; }
-        public string NivelEcucativo { get; set; }
 
     }
 }

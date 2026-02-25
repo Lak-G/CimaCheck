@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -10,8 +10,49 @@ namespace CimaCheck.Controllers
 {
     public static class AlumnosController
     {
-        public static async Task<List<Alumno>> 
-            ConseguirListasAlumnos(Supabase.Client supabase)
+        public static async Task<bool> ActualizarAsistencia(Supabase.Client supabase, int alumnoId, bool asistencia)
+        {
+            try
+            {
+                if (supabase == null)
+                {
+                    MessageBox.Show("Supabase no está inicializado");
+                    return false;
+                }
+
+                System.Diagnostics.Debug.WriteLine($"DEBUG: Actualizando ID={alumnoId}, Asistencia={asistencia}");
+
+                var updateData = new AlumnoEscuelaDb 
+                { 
+                    asistencia = asistencia,
+                    Id = alumnoId
+                };
+                
+                var response = await supabase
+                    .From<AlumnoEscuelaDb>()
+                    .Where(c => c.Id == alumnoId)
+                    .Update(updateData);
+
+                System.Diagnostics.Debug.WriteLine($"DEBUG: Response={response.ResponseMessage.StatusCode}");
+
+                if (!response.ResponseMessage.IsSuccessStatusCode)
+                {
+                    var errorContent = await response.ResponseMessage.Content.ReadAsStringAsync();
+                    MessageBox.Show($"Error de Supabase: {response.ResponseMessage.StatusCode} - {errorContent}");
+                    return false;
+                }
+
+                MessageBox.Show($"Actualizado correctamente. ID: {alumnoId}, Valor: {asistencia}");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al actualizar asistencia: {ex.Message}");
+                return false;
+            }
+        }
+
+        public static async Task<List<Alumno>> ConseguirListasAlumnos(Supabase.Client supabase)
         {
             try
             {
@@ -28,7 +69,6 @@ namespace CimaCheck.Controllers
                     Id = c.Id,
                     IdEscuela = c.IdEscuela,
                     NombreAlumno = c.NombreCompleto,
-                    NivelEcucativo = c.NivelEducativo,
                     Asistencia = c.asistencia,
                     VisistanteId = c.VisitanteId
                 }).ToList();
@@ -52,14 +92,14 @@ public class AlumnoEscuelaDb : BaseModel
     [Column("id_escuela")]
     public int IdEscuela { get; set; }
 
-    [Column("nombre_Alumno")]
+    [Column("nombre_alumno")]
     public string NombreCompleto { get; set; }
 
     [Column ("asistencia")]
     public bool asistencia { get; set; }
 
-    [Column("nivel_educativo")]
-    public string NivelEducativo { get; set; }
+    //[Column("nivel_educativo")]
+    //public string NivelEducativo { get; set; }
 
     [Column ("visitante_id")]
     public int VisitanteId { get; set; }

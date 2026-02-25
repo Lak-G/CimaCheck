@@ -1,4 +1,4 @@
-﻿using CimaCheck.Controllers;
+using CimaCheck.Controllers;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -58,6 +58,13 @@ namespace CimaCheck.Services
                 return false;
             }
         }
+
+        public static async Task<bool> ActualizarAsistenciaAlumno(int alumnoId, bool asistencia)
+        {
+            return await AlumnosController.ActualizarAsistencia(_supabase, alumnoId, asistencia);
+        }
+
+        public static Supabase.Client? ObtenerSupabase() => _supabase;
 
         /// <summary>
         /// Asynchronously retrieves a list of all students.

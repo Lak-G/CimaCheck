@@ -1,4 +1,4 @@
-﻿using System.Configuration;
+using System.Configuration;
 using System.Data;
 using System.IO;
 using System.Windows;
@@ -27,8 +27,15 @@ namespace CimaCheck
             Configuration = builder.Build();
 
             // Inicializar Supabase
-            await DataManager.InicializarAsync();
-        }   
+            try
+            {
+                await DataManager.InicializarAsync();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al inicializar Supabase: {ex.Message}");
+            }
+        }
     }
 
 }
