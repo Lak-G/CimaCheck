@@ -360,30 +360,14 @@
                             <Path Fill="{StaticResource UABCGreen}" Data="M44,4 L30.6666,4 L30.6666,17.3334 L17.3334,17.3334 L17.3334,30.6666 L4,30.6666 L4,44 L44,44 Z"/>
                         </Canvas>
                     </Viewbox>
-                    <TextBlock Text="UABC Event Registration" 
+                    <TextBlock Text="Mujeres y Niñas en Ciencia e Ingenieria - 2026" 
                                FontSize="18" 
                                FontWeight="Bold" 
                                Foreground="{StaticResource UABCGreen}"
                                VerticalAlignment="Center"/>
                 </StackPanel>
 
-                <!-- Navegación -->
-                <StackPanel Grid.Column="2" Orientation="Horizontal">
-                    <TextBlock Text="Home" 
-                               Style="{StaticResource HeaderLinkStyle}"/>
-
-                    <TextBlock Text="Events" 
-                               Style="{StaticResource HeaderLinkStyle}"/>
-
-                    <TextBlock Text="About" 
-                               Style="{StaticResource HeaderLinkStyle}"/>
-
-                    <Button x:Name="btnSoporte" 
-                            Content="Soporte"
-                            Margin="20, 0, 0, 0"
-                            Style="{StaticResource HeaderButtonSecondaryStyle}"
-                            />
-                </StackPanel>
+                
             </Grid>
         </Border>
 
@@ -415,6 +399,7 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
 
@@ -449,6 +434,8 @@
                     </ComboBox>
                 </StackPanel>
 
+                
+
                 <!-- Area TextBoxNombre-->
                 <StackPanel Grid.Column="2">
                     <TextBlock Text="Filtro por nombre" 
@@ -469,9 +456,25 @@
                                  BorderThickness="0"
                                  Padding="15,12"
                                  FontSize="14"
-                                 VerticalContentAlignment="Center"/>
+                                 VerticalContentAlignment="Center"
+                                 TextChanged="NombreCompletoTextBox_OnTextChanged"/>
                     </Border>
                 </StackPanel>
+
+
+                <!-- Area Btn Seleccionar todos-->
+                <Grid Grid.Column="3"
+                      Margin="10,0,0,0">
+                    <Button x:Name="SelectAllBtn"
+                            Content="Seleccionar todo"
+                            Style="{StaticResource SubmitButtonStyle}"
+                            VerticalAlignment="Center"
+                            Width="180"
+                            Click="SelectAllBtn_OnClick">
+
+                    </Button>
+                </Grid>
+
             </Grid>
 
             <!-- Area de lista de datos -->

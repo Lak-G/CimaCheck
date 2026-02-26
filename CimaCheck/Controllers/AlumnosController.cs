@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Security.RightsManagement;
 using System.Text;
 using System.Windows;
 using CimaCheck.Models;
@@ -65,33 +66,74 @@ namespace CimaCheck.Controllers
         //    }
         //}
 
+        //public static async Task<bool> ActualizarAsistencia(Supabase.Client supabase, int Id, bool Asistencia)
+        //{
+        //    try
+        //    {
+        //        MessageBox.Show($"entro Actualizar asistencia AlController 1 {Id}, {Asistencia}");
+
+        //        if (supabase == null) 
+        //            MessageBox.Show($"Supabase No Inicializada");
+
+        //        MessageBox.Show("entro Actualizar asistencia AlController 2");
+
+        //        var update = await supabase
+        //            .From<AlumnoEscuelaDb>()
+        //            .Where(c => c.Id == Id)
+        //            .Set(c => c.asistencia, Asistencia)
+        //            .Update();
+
+        //        MessageBox.Show("entro Actualizar asistencia AlController 1");
+
+        //        return true;
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        MessageBox.Show($"Error al actualizar asistencia: {exception.Message}");
+        //        return false;
+        //    }
+        //}
+
+
         public static async Task<bool> ActualizarAsistencia(Supabase.Client supabase, int Id, bool Asistencia)
         {
             try
             {
-                MessageBox.Show($"entro Actualizar asistencia AlController 1 {Id}, {Asistencia}");
+                if (supabase == null)
+                {
+                    MessageBox.Show("Supabase no inicializada");
+                    return false;
+                }
 
-                if (supabase == null) 
-                    MessageBox.Show($"Supabase No Inicializada");
+                // 1. Verifica que el registro existe ANTES de actualizar
+                var existe = await supabase
+                    .From<AlumnoEscuelaDb>()
+                    .Where(c => c.Id == Id)
+                    .Get();
 
-                MessageBox.Show("entro Actualizar asistencia AlController 2");
 
+                if (existe.Models.Count == 0)
+                {
+                    MessageBox.Show($"No existe alumno con Id: {Id}");
+                    return false;
+                }
+
+                // 2. Intenta el update
                 var update = await supabase
                     .From<AlumnoEscuelaDb>()
                     .Where(c => c.Id == Id)
                     .Set(c => c.asistencia, Asistencia)
                     .Update();
 
-                MessageBox.Show("entro Actualizar asistencia AlController 1");
-
-                return true;
+                return update.Models.Count > 0;
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
-                MessageBox.Show($"Error al actualizar asistencia: {exception.Message}");
+                MessageBox.Show($"Error: {ex.Message}\n\nStackTrace: {ex.StackTrace}");
                 return false;
             }
         }
+
 
         public static async Task<List<Alumno>> ConseguirListasAlumnos(Supabase.Client supabase)
         {

@@ -61,9 +61,10 @@ namespace CimaCheck.Services
 
         public static async Task<bool> ActualizarAsistenciaAlumno(int Id, bool asistencia)
         {
-            MessageBox.Show("Entro ActualizarAsisteiciaAlumno");
             return await AlumnosController.ActualizarAsistencia(_supabase, Id, asistencia);
         }
+
+        
 
         public static Supabase.Client? ObtenerSupabase() => _supabase;
 

@@ -28,6 +28,8 @@ namespace CimaCheck.Pages
         private List<Alumno> lsAlumnos = new List<Alumno>();
         private Escuela escuelaActual = new Escuela();
 
+        private bool check = true;
+
         public GroupRegistration()
         {
             InitializeComponent();
@@ -211,15 +213,20 @@ namespace CimaCheck.Pages
 
             ContenedorTarjetas.Children.Add(Tarjeta);
         }
-         
 
-        //private void ObtenerListaChecados()
-        //{
-        //    foreach (var Tarjeta in ContenedorTarjetas.Children)
-        //    { 
-        //        if (Tarjeta.Get)
-        //    }
-        //}
+        private void MarcarTodosCheckBox(bool marcar)
+        {
+            foreach (Border tarjeta in ContenedorTarjetas.Children.OfType<Border>())
+            {
+                // Border → Grid → CheckBox
+                if (tarjeta.Child is Grid grid)
+                {
+                    var checkBox = grid.Children.OfType<CheckBox>().FirstOrDefault();
+                    if (checkBox != null)
+                        checkBox.IsChecked = marcar;
+                }
+            }
+        }
 
         /// <summary>
         /// Handles the Click event of the Submit button to register attendance for all students in the current list.
@@ -252,8 +259,6 @@ namespace CimaCheck.Pages
                         else
                             fallos++;
 
-                        if(alumno.Asistencia)
-                            MessageBox.Show($"Asistencia registrada para {alumno.NombreAlumno}.");
                     }
                 }
 
@@ -265,6 +270,34 @@ namespace CimaCheck.Pages
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al registrar asistencia: {ex.Message}");
+            }
+        }
+
+        private void SelectAllBtn_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (check)
+            {
+                MarcarTodosCheckBox(true);
+                check = false;
+            }else
+            {
+                MarcarTodosCheckBox(false);
+                check = true;
+            }
+        }
+
+        private void NombreCompletoTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            ContenedorTarjetas.Children.Clear();
+
+            string filtro = NombreCompletoTextBox.Text.ToUpper().Trim();
+
+            foreach (var temp in lsAlumnos)
+            {
+                if (temp.NombreAlumno.ToUpper().Contains(filtro))
+                {
+                    AddCard(temp);
+                }
             }
         }
     }
