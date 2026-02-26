@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using CimaCheck.Models;
 
 namespace CimaCheck.Pages
 {
@@ -21,6 +22,16 @@ namespace CimaCheck.Pages
         public CimaRegistration()
         {
             InitializeComponent();
+        }
+
+        private void SubmitButton_Click(object sender, RoutedEventArgs e)
+        {
+            Cimarron cima = new Cimarron()
+            {
+                Nombre = FullNameTextBox.Text,
+                Genero = GenderComboBox.SelectedItem.ToString()
+                //faltan las demas partes de la logica de registro, como facultad, programa, etc.
+            };
         }
     }
 }

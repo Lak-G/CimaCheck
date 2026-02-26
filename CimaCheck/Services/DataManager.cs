@@ -59,9 +59,10 @@ namespace CimaCheck.Services
             }
         }
 
-        public static async Task<bool> ActualizarAsistenciaAlumno(int alumnoId, bool asistencia)
+        public static async Task<bool> ActualizarAsistenciaAlumno(int Id, bool asistencia)
         {
-            return await AlumnosController.ActualizarAsistencia(_supabase, alumnoId, asistencia);
+            MessageBox.Show("Entro ActualizarAsisteiciaAlumno");
+            return await AlumnosController.ActualizarAsistencia(_supabase, Id, asistencia);
         }
 
         public static Supabase.Client? ObtenerSupabase() => _supabase;
@@ -94,5 +95,14 @@ namespace CimaCheck.Services
             List<Facultad> lsFaculty = await UniversitiesController.GetFacultades(_supabase);
             return lsFaculty;
         }
+
+        #region Registro Cimarrones
+
+        public static async void RegistrarCimarron(Cimarron cima)
+        {
+            CimarronController.RegistrarCimarron(_supabase, cima);
+        }
+
+        #endregion
     }
 }

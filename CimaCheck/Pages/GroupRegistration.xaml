@@ -475,7 +475,7 @@
             </Grid>
 
             <!-- Area de lista de datos -->
-            <ScrollViewer Height="380" 
+            <ScrollViewer Height="280" 
                           VerticalScrollBarVisibility="Hidden"
                           HorizontalScrollBarVisibility="Disabled">
                 <StackPanel x:Name="ContenedorTarjetas" 
