@@ -360,7 +360,7 @@
                             <Path Fill="{StaticResource UABCGreen}" Data="M44,4 L30.6666,4 L30.6666,17.3334 L17.3334,17.3334 L17.3334,30.6666 L4,30.6666 L4,44 L44,44 Z"/>
                         </Canvas>
                     </Viewbox>
-                    <TextBlock Text="Mujeres y Niñas en Ciencia e Ingenieria - 2026" 
+                    <TextBlock Text="CimaCheck - Registro Grupal" 
                                FontSize="18" 
                                FontWeight="Bold" 
                                Foreground="{StaticResource UABCGreen}"

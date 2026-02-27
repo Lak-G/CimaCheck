@@ -1,0 +1,140 @@
+﻿<Window x:Class="CimaCheck.Pages.RegustroExitosoDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Agregar nueva escuela" 
+        Height="320" 
+        Width="500"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        AllowsTransparency="True"
+        Background="Transparent">
+
+    <Window.Resources>
+        <SolidColorBrush x:Key="UABCGreen" Color="#00594D"/>
+        <SolidColorBrush x:Key="UABCGold" Color="#D7A22A"/>
+
+        <Style x:Key="btnCancelarStyle" TargetType="Border">
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderBrush" Value="{StaticResource UABCGreen}"/>
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect ShadowDepth="5" BlurRadius="15" Opacity="0.2" Color="#00594D"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Border Background="White" 
+            CornerRadius="16" 
+            Padding="40"
+            Margin="10">
+        <Border.Effect>
+            <DropShadowEffect ShadowDepth="0" BlurRadius="20" Opacity="0.3" Color="Black"/>
+        </Border.Effect>
+
+        <Grid Margin="0, 10, 0, 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Título -->
+            <TextBlock Grid.Row="0" 
+                       Text="Registro exitoso" 
+                       FontSize="24" 
+                       FontWeight="Bold" 
+                       Foreground="{StaticResource UABCGreen}"
+                       Margin="0,30,0,10"
+                       TextAlignment="Center">
+            </TextBlock>
+
+            <!-- Label -->
+            <TextBlock Grid.Row="1"
+                       Text="Se registro la asistencia en la base de datos"
+                       TextAlignment="Center"
+                       FontSize="15"
+                       FontWeight="Medium"
+                       Foreground="#FF555555"
+                       Margin="0,0,0,0"/>
+
+
+
+
+            <!-- Botones -->
+            <!--
+            <Grid Grid.Row="3" 
+                  Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    
+                </Grid.ColumnDefinitions>
+                
+
+                <Button x:Name="GuardarButton"
+                        Grid.Column="0"
+                        Content="Aceptar"
+                        Height="50"
+                        Background="{StaticResource UABCGreen}"
+                        Foreground="White"
+                        FontSize="16"
+                        FontWeight="Bold"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        Click="GuardarButton_OnClick">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    CornerRadius="25"
+                                    Style="{StaticResource btnCancelarStyle}"
+                                    >
+                                <ContentPresenter HorizontalAlignment="Center" 
+                                                VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+            -->
+            <Label Grid.Row="2" Content="Aceptar" 
+                   HorizontalContentAlignment="Center"
+                   VerticalContentAlignment="Center"
+                   Width="80"
+                   FontSize="18"
+                   FontWeight="Bold"
+                   Foreground="#413036"
+                   MouseDown="ProgressBar1_OnMouseDown"
+                   Panel.ZIndex="1"/>
+            <ProgressBar Grid.Row="2" x:Name="ProgressBar1" 
+                         Value="0" 
+                         Maximum="200" 
+                         Width="300"
+                         Height="40"
+                         Foreground="{StaticResource UABCGreen}"
+                         Background="Transparent"
+                         MouseDown="ProgressBar1_OnMouseDown"
+                         Panel.ZIndex="0">
+                <ProgressBar.Template>
+                    <ControlTemplate TargetType="ProgressBar">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderThickness="0"
+                                CornerRadius="20">
+                            <Grid>
+                                <Border x:Name="PART_Track" />
+                                <Border x:Name="PART_Indicator" 
+                                        Background="{TemplateBinding Foreground}"
+                                        HorizontalAlignment="Left"
+                                        CornerRadius="20"/>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </ProgressBar.Template>
+            </ProgressBar>
+        </Grid>
+    </Border>
+</Window>

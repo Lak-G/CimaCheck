@@ -115,5 +115,14 @@ namespace CimaCheck.Services
         }
 
         #endregion
+
+        #region Registro Individual
+
+        public async static void RegistroIndividual(Externos registro)
+        {
+            _ = await RegistroIndividualController.RegistroIndividual(_supabase, registro);
+        }
+
+        #endregion
     }
 }

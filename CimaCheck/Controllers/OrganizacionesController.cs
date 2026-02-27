@@ -48,6 +48,6 @@ namespace CimaCheck.Controllers
         [Column("id_procedencia")]
         public int IdProcedencia { get; set; }
 
-        [Column("nombre_procedencia")]
+        [Column("nombre_proc")]
         public string NombreProcedencia { get; set; }
     }

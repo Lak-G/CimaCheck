@@ -282,8 +282,40 @@
     </UserControl.Resources>
 
     <Grid>
-        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-            <StackPanel HorizontalAlignment="Center"  Width="540" Margin="0,100,0,80">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Padding="40,15,40,15" BorderBrush="#334C9C16" BorderThickness="0,0,0,1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Logo y título -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <Viewbox Width="24" Height="24" Margin="0,0,15,0">
+                        <Canvas Width="48" Height="48">
+                            <Path Fill="{StaticResource UABCGreen}" Data="M44,4 L30.6666,4 L30.6666,17.3334 L17.3334,17.3334 L17.3334,30.6666 L4,30.6666 L4,44 L44,44 Z"/>
+                        </Canvas>
+                    </Viewbox>
+                    <TextBlock Text="CimaCheck - Regístro Individual" 
+                               FontSize="18" 
+                               FontWeight="Bold" 
+                               Foreground="{StaticResource UABCGreen}"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+
+
+            </Grid>
+        </Border>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="0,10,0,-10">
+            <StackPanel HorizontalAlignment="Center"  Width="540" Margin="0,10,0,80">
 
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -457,7 +489,7 @@
 
 
                     <StackPanel>
-                        <TextBlock x:Name="OrganizationLabel" Text="Seleccione el genero*" 
+                        <TextBlock x:Name="OrganizationLabel" Text="Seleccione la organizacion*" 
                                    FontSize="13" 
                                    Foreground="#FF555555"
                                    Margin="0,0,0,8"/>
@@ -472,7 +504,7 @@
                             Content="Registrar"
                             Style="{StaticResource SubmitButtonStyle}"
                             Margin="0,25,0,0"
-                            
+                            Click="SubmitButton_OnClick"
                             />
 
                 </StackPanel>

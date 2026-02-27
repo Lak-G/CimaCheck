@@ -263,7 +263,11 @@ namespace CimaCheck.Pages
                 }
 
                 if (fallos == 0)
-                    MessageBox.Show($"Asistencia registrada exitosamente para {exitosos} alumno(s).");
+                {
+                    var dialog = new RegustroExitosoDialog();
+                    dialog.Owner = Window.GetWindow(this);
+                    dialog.ShowDialog();
+                }
                 else
                     MessageBox.Show($"Se registró la asistencia de {exitosos} alumno(s). {fallos} fallos.");
             }

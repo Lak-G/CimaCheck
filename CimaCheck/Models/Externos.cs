@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CimaCheck.Models
 {
-    class Externos
+    public class Externos
     {
         public int Id { get; set; }
 
