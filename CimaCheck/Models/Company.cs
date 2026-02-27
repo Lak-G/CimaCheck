@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CimaCheck.Models
 {
-    class Company
+    public class Company
     {
         public int Id { get; set; }
 

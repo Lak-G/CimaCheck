@@ -1,0 +1,1 @@
+1. Error de desincronizacion de los jsons al salir y entrar de la pantalla de registro grupal

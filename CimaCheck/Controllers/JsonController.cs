@@ -22,7 +22,7 @@ namespace CimaCheck.Controllers
             UpdateSchoolsJson();
             UpdateCareerJson();
             UpdateFacultiesJson();
-
+            UpdateOrgJson();
             MessageBox.Show($"datos cargados"); 
         }
 
@@ -103,6 +103,14 @@ namespace CimaCheck.Controllers
             }
         }
 
+        /// <summary>
+        /// Asynchronously retrieves the list of faculties and updates the "Facultades.json" file with the latest data
+        /// in JSON format.
+        /// </summary>
+        /// <remarks>This method displays a message box if an error occurs while retrieving or saving the
+        /// data. Because the method is asynchronous and returns void, exceptions cannot be awaited or caught by the
+        /// caller. Use with caution in production code, as this pattern is generally recommended only for event
+        /// handlers.</remarks>
         public static async void UpdateFacultiesJson()
         {
             try
@@ -120,55 +128,37 @@ namespace CimaCheck.Controllers
             }
         }
 
-        //Metodo provicional para deserializar los jsons, se planea usar para cargar los datos en la aplicacion
 
-        //public static async Task<List<T>> JsonDeserializer<T>(string fileName)
-        //{
-        //    try
-        //    {
-        //        if (!File.Exists(fileName))
-        //        {
-        //            MessageBox.Show("No existe el archivo indicado");
-        //            return new List<T>();
-        //        }
+        public static async void UpdateOrgJson() 
+        {
+            try 
+            {
+                List<Company> lsOrg = await DataManager.ConseguirOrg();
+                String json = JsonSerializer.Serialize(lsOrg, new JsonSerializerOptions
+                {
+                    WriteIndented = true
+                });
+                File.WriteAllText("Organizaciones.json", json);
 
-        //        string json = await File.ReadAllTextAsync(fileName);
+                MessageBox.Show($"Organizaciones actualizadas");
+            } 
+            catch (Exception ex)
+            {
+                MessageBox.Show($"No se pudieron guardar los datos en el json {ex.Message}");
+            }
+        }
 
-        //        if (string.IsNullOrWhiteSpace(json))
-        //        {
-        //            MessageBox.Show("El archivo está vacío");
-        //            return new List<T>();
-        //        }
 
-        //        // IMPORTANTE: Agregar opciones de deserialización
-        //        var options = new JsonSerializerOptions
-        //        {
-        //            PropertyNameCaseInsensitive = true,
-        //            PropertyNamingPolicy = null, // Mantiene los nombres tal cual
-        //            WriteIndented = true
-        //        };
-
-        //        List<T> objectsList = JsonSerializer.Deserialize<List<T>>(json, options);
-
-        //        foreach (var obj in objectsList)
-        //        {
-        //            Console.WriteLine(obj.ToString());
-        //        }
-
-        //        return objectsList ?? new List<T>();
-        //    }
-        //    catch (JsonException jsonEx)
-        //    {
-        //        MessageBox.Show($"Error JSON:\n{jsonEx.Message}");
-        //        return new List<T>();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show($"Error al deserializar:\n{ex.Message}");
-        //        return new List<T>();
-        //    }
-        //}
-
+        /// <summary>
+        /// Asynchronously deserializes a JSON file into a list of objects of type T.
+        /// </summary>
+        /// <remarks>If the file does not exist, is empty, or deserialization fails, a message box is
+        /// displayed and an empty list is returned. This method is intended for use in applications with a user
+        /// interface, as it displays error messages using message boxes.</remarks>
+        /// <typeparam name="T">The type of objects to deserialize from the JSON file.</typeparam>
+        /// <param name="fileName">The path to the JSON file to read and deserialize. Cannot be null or empty.</param>
+        /// <returns>A list of objects of type T deserialized from the JSON file. Returns an empty list if the file does not
+        /// exist, is empty, or cannot be deserialized.</returns>
         public static async Task<List<T>> JsonDeserializer<T>(string fileName)
         {
             try

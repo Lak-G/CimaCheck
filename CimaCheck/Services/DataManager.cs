@@ -105,5 +105,15 @@ namespace CimaCheck.Services
         }
 
         #endregion
+
+        #region Organizaciones
+
+        public static async Task<List<Company>> ConseguirOrg()
+        {
+            List<Company> lsOrg = await OrganizacionesController.GetOrg(_supabase);
+            return lsOrg;
+        }
+
+        #endregion
     }
 }
