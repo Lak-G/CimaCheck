@@ -289,14 +289,24 @@ namespace CimaCheck.Pages
                 check = true;
             }
         }
-
+        /// <summary>
+        /// Handles the TextChanged event for the full name input box, updating the displayed list of student cards to
+        /// match the entered filter.
+        /// </summary>
+        /// <remarks>The displayed student cards are filtered in real time as the user types, showing only
+        /// those students whose names contain the entered text, case-insensitively. This method clears and repopulates
+        /// the card container on each text change.</remarks>
+        /// <param name="sender">The source of the event, typically the full name TextBox.</param>
+        /// <param name="e">The event data associated with the text change.</param>
         private void NombreCompletoTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
         {
             ContenedorTarjetas.Children.Clear();
 
             string filtro = NombreCompletoTextBox.Text.ToUpper().Trim();
+            var alumnosDeEscuela = lsAlumnos.Where(a => a.IdEscuela == escuelaActual.Id).ToList();
 
-            foreach (var temp in lsAlumnos)
+            
+            foreach (var temp in alumnosDeEscuela)
             {
                 if (temp.NombreAlumno.ToUpper().Contains(filtro))
                 {
