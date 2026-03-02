@@ -12,6 +12,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using CimaCheck.Controllers;
 using CimaCheck.Models;
+using CimaCheck.Services;
 
 namespace CimaCheck.Pages
 {
@@ -53,12 +54,77 @@ namespace CimaCheck.Pages
 
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
-            Cimarron cima = new Cimarron()
+            try
             {
-                Nombre = FullNameTextBox.Text,
-                Genero = GenderComboBox.SelectedItem.ToString()
-                //faltan las demas partes de la logica de registro, como facultad, programa, etc.
-            };
+                if (FullNameTextBox.Text.Trim() == "" || GenderComboBox.SelectedIndex == 0 ||
+                    FacultyComboBox.SelectedIndex == 0 || ProEdComboBox.SelectedIndex == 0)
+                {
+                    FullNameLabel.Foreground = new SolidColorBrush(Colors.DarkRed);
+                    GenderLabel.Foreground = new SolidColorBrush(Colors.DarkRed);
+                    FacultyLabel.Foreground = new SolidColorBrush(Colors.DarkRed);
+                    ProEdLabel.Foreground = new SolidColorBrush(Colors.DarkRed);
+                    return;
+                }
+                else
+                {
+                    FullNameLabel.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF555555"));
+                    GenderLabel.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF555555"));
+                    FacultyLabel.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF555555"));
+                    ProEdLabel.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF555555"));
+                }
+
+                string nombre = FullNameTextBox.Text;
+
+                string genero = "";
+                if (GenderComboBox.SelectedItem is ComboBoxItem generoItem)
+                {
+                    genero = generoItem.Content.ToString() switch
+                    {
+                        "Masculino" => "Masculino",
+                        "Femenino" => "Femenino",
+                        "Otro" => "Otro",
+                        _ => ""
+                    };
+                }
+
+                int facultadId = 0;
+                if (FacultyComboBox.SelectedItem is ComboBoxItem facultadItem && facultadItem.Tag != null)
+                    facultadId = (int)facultadItem.Tag;
+
+                int programaId = 0;
+                if (ProEdComboBox.SelectedItem is ComboBoxItem programaItem && programaItem.Tag != null)
+                    programaId = (int)programaItem.Tag;
+
+                Cimarron cima = new Cimarron
+                {
+                    Nombre = nombre,
+                    Genero = genero,
+                    FacultadId = facultadId,
+                    ProgramaId = programaId
+                };
+
+                DataManager.RegistrarCimarron(cima);
+
+                LimpiarFormulario();
+
+                var dialog = new RegustroExitosoDialog();
+                dialog.Owner = Window.GetWindow(this);
+                dialog.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error en el registro: {ex}");
+            }
+        }
+
+        private void LimpiarFormulario()
+        {
+            FullNameTextBox.Text = "";
+            MatriculaTextBox.Text = "";
+            GenderComboBox.SelectedIndex = 0;
+            FacultyComboBox.SelectedIndex = 0;
+            ProEdComboBox.Items.Clear();
+            ProEdComboBox.Items.Add(new ComboBoxItem { Content = "Seleccione una Carrera", IsEnabled = false, IsSelected = true });
         }
 
         private void FacultyComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
