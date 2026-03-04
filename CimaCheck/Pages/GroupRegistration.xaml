@@ -572,6 +572,7 @@
                                Foreground="#FF555555"
                                Margin="0,0,0,8"/>
                     <ComboBox x:Name="SchoolNameComboBox"
+                              Width="220"
                               Style="{StaticResource SchoolComboBoxStyle}"
                               SelectionChanged="SchoolNameComboBox_OnSelectionChanged"
                               DropDownOpened="SchoolNameComboBox_DropDownOpened">
@@ -587,6 +588,7 @@
                                Foreground="#FF555555"
                                Margin="0,0,0,8"/>
                     <ComboBox x:Name="NivelEducativoComboBox"
+                              Width="220"
                               Style="{StaticResource InputComboBoxStyle}"
                               SelectionChanged="NivelEducativoComboBox_OnSelectionChanged">
                         <ComboBoxItem Content="Selecciona un nivel educativo" IsEnabled="False" IsSelected="True"/>

@@ -196,7 +196,7 @@
                                                 <Path Fill="{StaticResource UABCGold}" Data="{StaticResource GroupIcon}"/>
                                             </Canvas>
                                         </Viewbox>
-                                        <TextBlock Text="Como grupo" 
+                                        <TextBlock Text="Escuela" 
                                                    FontSize="28" 
                                                    FontWeight="Bold" 
                                                    Foreground="{StaticResource UABCGreen}"
@@ -354,7 +354,7 @@
                                             <Path Fill="{StaticResource UABCGold}" Data="{StaticResource GroupIcon}"/>
                                         </Canvas>
                                     </Viewbox>
-                                    <TextBlock Text="Como Cimarrón" 
+                                    <TextBlock Text="Cimarrón" 
                                                    FontSize="28" 
                                                    FontWeight="Bold" 
                                                    Foreground="{StaticResource UABCGreen}"
