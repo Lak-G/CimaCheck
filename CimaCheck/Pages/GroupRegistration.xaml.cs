@@ -16,9 +16,6 @@ using CimaCheck.Services;
 
 namespace CimaCheck.Pages
 {
-
-
-
     /// <summary>
     /// Lógica de interacción para GroupRegistration.xaml
     /// </summary>
@@ -29,6 +26,7 @@ namespace CimaCheck.Pages
         private Escuela escuelaActual = new Escuela();
 
         private bool check = true;
+        private TextBox? _schoolSearchBox = null;
 
         public GroupRegistration()
         {
@@ -298,6 +296,38 @@ namespace CimaCheck.Pages
         /// the card container on each text change.</remarks>
         /// <param name="sender">The source of the event, typically the full name TextBox.</param>
         /// <param name="e">The event data associated with the text change.</param>
+        private void SchoolNameComboBox_DropDownOpened(object sender, EventArgs e)
+        {
+            if (_schoolSearchBox == null)
+            {
+                _schoolSearchBox = SchoolNameComboBox.Template.FindName("PART_SearchBox", SchoolNameComboBox) as TextBox;
+                if (_schoolSearchBox != null)
+                    _schoolSearchBox.TextChanged += SchoolSearchBox_TextChanged;
+            }
+
+            if (_schoolSearchBox != null)
+                _schoolSearchBox.Text = string.Empty;
+
+            foreach (var item in SchoolNameComboBox.Items.OfType<ComboBoxItem>())
+                item.Visibility = Visibility.Visible;
+
+            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Input,
+                new Action(() => _schoolSearchBox?.Focus()));
+        }
+
+        private void SchoolSearchBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string searchText = (_schoolSearchBox?.Text ?? string.Empty).ToUpper().Trim();
+
+            foreach (var item in SchoolNameComboBox.Items.OfType<ComboBoxItem>())
+            {
+                item.Visibility = string.IsNullOrEmpty(searchText) ||
+                                   item.Content?.ToString().ToUpper().Contains(searchText) == true
+                    ? Visibility.Visible
+                    : Visibility.Collapsed;
+            }
+        }
+
         private void NombreCompletoTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
         {
             ContenedorTarjetas.Children.Clear();

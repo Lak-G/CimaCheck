@@ -99,7 +99,8 @@ namespace CimaCheck.Pages
                     Nombre = nombre,
                     Genero = genero,
                     IdProcedencia = idProcedencia,
-                    Edad = edad
+                    Edad = edad,
+                    Correo = CorreoElectronicoTextBox.Text.Trim()
                 };
 
                 DataManager.RegistroIndividual(registro);
@@ -117,10 +118,40 @@ namespace CimaCheck.Pages
             }
         }
 
+        private void CorreoElectronicoTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = e.Text.Contains(" ");
+        }
+
+        private void CorreoElectronicoTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Space)
+                e.Handled = true;
+        }
+
+        private void CorreoElectronicoTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string texto = CorreoElectronicoTextBox.Text;
+
+            if (texto.Length > 0 && !texto.Contains("@"))
+            {
+                CorreoBorder.BorderBrush = new SolidColorBrush(Colors.DarkRed);
+                CorreoElectronicoLabel.Foreground = new SolidColorBrush(Colors.DarkRed);
+                EmailErrorMessage.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                CorreoBorder.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D7A22A"));
+                CorreoElectronicoLabel.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF555555"));
+                EmailErrorMessage.Visibility = Visibility.Collapsed;
+            }
+        }
+
         private void LimpiarFormulario()
         {
             NombreCompletoTextBox.Text = "";
             CorreoElectronicoTextBox.Text = "";
+            EdadTextBox.Text = "";
             GenderComboBox.SelectedIndex = 0;
         }
 

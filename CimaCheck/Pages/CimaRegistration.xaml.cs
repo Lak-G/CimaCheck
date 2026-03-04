@@ -127,6 +127,11 @@ namespace CimaCheck.Pages
             ProEdComboBox.Items.Add(new ComboBoxItem { Content = "Seleccione una Carrera", IsEnabled = false, IsSelected = true });
         }
 
+        private void MatriculaTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !e.Text.All(char.IsDigit);
+        }
+
         private void FacultyComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (FacultyComboBox.SelectedItem is ComboBoxItem cbi && cbi.Tag != null)

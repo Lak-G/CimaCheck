@@ -80,6 +80,15 @@ namespace CimaCheck
             };
         }
 
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape && !(PageContainer.Content is PagePrincipal))
+            {
+                NavigateToPagePrincipal();
+                e.Handled = true;
+            }
+        }
+
         private void DataReader()
         {
             JsonController.UpdateAllJsons();

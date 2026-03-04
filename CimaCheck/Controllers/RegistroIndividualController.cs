@@ -26,7 +26,8 @@ namespace CimaCheck.Controllers
                     Nombre = registro.Nombre,
                     Genero = registro.Genero,
                     IdProcedencia = registro.IdProcedencia,
-                    Edad = registro.Edad
+                    Edad = registro.Edad,
+                    Correo = registro.Correo
                 };
 
                 supabase.From<ExternosDb>().Insert(regTemp);
@@ -60,5 +61,8 @@ namespace CimaCheck.Controllers
 
         [Column("edad")]
         public string Edad { get; set; }
+
+        [Column("correo")]
+        public string Correo { get; set; }
     }
 }

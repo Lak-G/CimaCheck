@@ -212,11 +212,15 @@
                                           Margin="0,0,12,0"
                                           VerticalAlignment="Center"/>
                                     <ToggleButton Grid.Column="0" Grid.ColumnSpan="2"
-                                                Background="Transparent"
-                                                BorderThickness="0"
                                                 Focusable="False"
                                                 IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                                ClickMode="Press"/>
+                                                ClickMode="Press">
+                                        <ToggleButton.Template>
+                                            <ControlTemplate TargetType="ToggleButton">
+                                                <Border Background="Transparent"/>
+                                            </ControlTemplate>
+                                        </ToggleButton.Template>
+                                    </ToggleButton>
                                 </Grid>
                             </Border>
                             <Popup x:Name="PART_Popup"
@@ -278,6 +282,23 @@
                     </Style>
                 </Setter.Value>
             </Setter>
+        </Style>
+        <Style x:Key="InputBorderStyle" TargetType="Border">
+            <Setter Property="Background" Value="#80F5F5DC"/>
+            <Setter Property="BorderBrush" Value="{StaticResource UABCGold}"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect ShadowDepth="0" BlurRadius="8" Opacity="0.25" Color="#D7A22A"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
         </Style>
     </UserControl.Resources>
 
@@ -351,12 +372,7 @@
                                    FontWeight="Medium"
                                    Foreground="#FF555555"
                                    Margin="0,0,0,8"/>
-                        <Border Background="#80F5F5DC"
-                                BorderBrush="{StaticResource UABCGold}"
-                                BorderThickness="2"
-                                CornerRadius="8"
-                                Height="50"
-                                VerticalAlignment="Top">
+                        <Border Style="{StaticResource InputBorderStyle}">
                             <TextBox x:Name="MatriculaTextBox"
                                      Background="Transparent"
                                      BorderThickness="0"
@@ -364,6 +380,7 @@
                                      FontSize="14"
                                      VerticalContentAlignment="Center"
                                      MaxLength="7"
+                                     PreviewTextInput="MatriculaTextBox_PreviewTextInput"
                                      />
                         </Border>
                         <TextBlock x:Name="MatriculaPlaceholder"
@@ -401,12 +418,7 @@
                                        FontWeight="Medium"
                                        Foreground="#FF555555"
                                        Margin="0,0,0,8"/>
-                            <Border Background="#80F5F5DC"
-                                    BorderBrush="{StaticResource UABCGold}"
-                                    BorderThickness="2"
-                                    CornerRadius="8"
-                                    Height="50"
-                                    VerticalAlignment="Top">
+                            <Border Style="{StaticResource InputBorderStyle}">
                                 <TextBox x:Name="FullNameTextBox"
                                          Background="Transparent"
                                          BorderThickness="0"

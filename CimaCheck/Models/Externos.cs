@@ -13,5 +13,6 @@ namespace CimaCheck.Models
         public string Genero { get; set; }
         public int IdProcedencia { get; set; }
         public string Edad { get; set; }
+        public string Correo { get; set; }
     }
 }

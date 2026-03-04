@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:CimaCheck"
         mc:Ignorable="d" WindowState="Maximized" WindowStyle="None"
         Title="MainWindow" Height="450" Width="800"
-        Background="#F7F8F6">
+        Background="#F7F8F6"
+        PreviewKeyDown="Window_PreviewKeyDown">
     <Grid>
         <ContentControl x:Name="PageContainer"
                         Content="{Binding currentPage}"/>
